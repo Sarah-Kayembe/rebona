@@ -63,6 +63,12 @@ export default function Home() {
         <p className="mt-4 text-center text-sm text-muted">
           {t(locale, "onboarding.privacy")}
         </p>
+        <button
+          onClick={() => router.push("/history")}
+          className="mt-6 w-full text-center text-sm text-brand underline"
+        >
+          {t(locale, "action.retake")}
+        </button>
       </div>
     </main>
   );
