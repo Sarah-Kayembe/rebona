@@ -41,7 +41,6 @@ export default function Results() {
       router.replace("/onboarding");
       return;
     }
-    setLocale(session.locale);
 
     fetch("/api/screenings", {
       method: "POST",
@@ -57,10 +56,15 @@ export default function Results() {
     })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data: Result) => {
+        // Set together with the result, since clearSession forgets the locale.
+        setLocale(session.locale);
         setResult(data);
         clearSession();
       })
-      .catch(() => setError(true));
+      .catch(() => {
+        setLocale(session.locale);
+        setError(true);
+      });
   }, [router]);
 
   if (error) {

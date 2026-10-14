@@ -1,22 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { t } from "@/lib/i18n";
-import {
-  loadSession,
-  saveSession,
-  type Session,
-  type Sex,
-} from "@/lib/screening/session";
+import { saveSession, type Session, type Sex } from "@/lib/screening/session";
+import { useSession } from "@/lib/screening/useSession";
 
 const SEXES: Sex[] = ["female", "male", "prefer_not_to_say"];
 
 export default function Onboarding() {
   const router = useRouter();
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => setSession(loadSession()), []);
+  const session = useSession();
 
   if (!session) return null;
 
@@ -24,9 +17,7 @@ export default function Onboarding() {
   const ready = session.age !== null && session.age > 0 && session.sex !== null;
 
   function update(patch: Partial<Session>) {
-    const next = { ...session!, ...patch };
-    setSession(next);
-    saveSession(next);
+    saveSession({ ...session!, ...patch });
   }
 
   return (
