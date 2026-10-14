@@ -1,6 +1,7 @@
 import {
   QUESTIONS,
   RISK_TIERS,
+  isQuestionVisible,
   URGENT_REFERRAL_RULES,
   type Question,
 } from "./questions";
@@ -101,14 +102,6 @@ function scoreNumeric(q: Question, value: AnswerValue): number {
   return band?.points ?? 0;
 }
 
-function isVisible(q: Question, answers: Answers): boolean {
-  if (!q.dependsOn) return true;
-  const { questionId, equals, notEquals } = q.dependsOn;
-  const actual = answers[questionId];
-  if (notEquals !== undefined) return actual !== notEquals;
-  return actual === equals;
-}
-
 export function tierFor(score: number): RiskTier {
   let tier: RiskTier = "low";
   for (const t of RISK_TIERS) {
@@ -144,7 +137,7 @@ export function scoreScreening(
   const contributions: Contribution[] = [];
 
   for (const q of QUESTIONS) {
-    if (!isVisible(q, answers)) continue;
+    if (!isQuestionVisible(q, answers)) continue;
     const value = answers[q.id];
     if (value === undefined || value === null || value === "") continue;
 
@@ -194,7 +187,7 @@ export function completeness(answers: Answers): {
   ratio: number;
 } {
   const required = QUESTIONS.filter(
-    (q) => !q.optional && isVisible(q, answers)
+    (q) => !q.optional && isQuestionVisible(q, answers)
   );
   const answered = required.filter((q) => {
     const v = answers[q.id];

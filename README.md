@@ -23,7 +23,7 @@ Chronic diseases like hypertension and diabetes often build up quietly for years
 
 ## What it does
 
-- **Short, guided questionnaire.** About 14 questions adapted from the WHO STEPwise approach to chronic disease risk factor surveillance (STEPS). Follow-up questions only appear when they are relevant, and height, weight and blood pressure are optional.
+- **Short, guided questionnaire.** Up to 15 questions adapted from the WHO STEPwise approach to chronic disease risk factor surveillance (STEPS). Follow-up questions only appear when they are relevant, and height, weight and blood pressure are optional.
 - **Scoring you can explain.** Risk is calculated with transparent rules rather than a black-box model. Every point traces back to a specific answer, and the results screen shows each contribution so a person (or a clinician) can see why the score is what it is.
 - **Urgent flags.** Some answers, like a very high blood pressure reading or a cluster of warning symptoms, flag the result as urgent no matter the overall score.
 - **Private by design.** No name, phone number or email. A random ID stored on the device is the only link between a person and their past screenings.

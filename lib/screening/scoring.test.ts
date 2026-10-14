@@ -177,3 +177,15 @@ describe("completeness", () => {
     expect(withMeasurements.total).toBe(completeness(healthy).total);
   });
 });
+
+describe("heavy drinking", () => {
+  it("counts toward the score for people who drink", () => {
+    const result = scoreScreening({
+      ...healthy,
+      alcohol_frequency: "weekly",
+      alcohol_heavy: "often",
+    });
+    // 2 for drinking weekly, 3 for often drinking heavily
+    expect(result.score).toBe(5);
+  });
+});
