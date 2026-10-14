@@ -78,6 +78,8 @@ The scoring engine has unit tests that check every rule: the points for each ans
 npm test
 ```
 
+GitHub Actions runs lint, the type check, the tests and a production build on every pull request and every push to main.
+
 ## Project structure
 
 ```
