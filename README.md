@@ -70,6 +70,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Run the tests
+
+The scoring engine has unit tests that check every rule: the points for each answer, the risk tiers, BMI, the urgent flags and which follow-up questions count.
+
+```bash
+npm test
+```
+
 ## Project structure
 
 ```
