@@ -3,32 +3,29 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { t } from "@/lib/i18n";
-import { visibleQuestions, type Question } from "@/lib/screening/questions";
+import { visibleQuestions } from "@/lib/screening/questions";
 import type { AnswerValue } from "@/lib/screening/scoring";
-import { loadSession, saveSession, type Session } from "@/lib/screening/session";
+import { saveSession } from "@/lib/screening/session";
+import { useSession } from "@/lib/screening/useSession";
 
 const NONE_KEYS = new Set(["none", "never"]);
 
 export default function Screening() {
   const router = useRouter();
-  const [session, setSession] = useState<Session | null>(null);
+  const session = useSession();
   const [index, setIndex] = useState(0);
+  const needsOnboarding = session !== null && (session.age === null || session.sex === null);
 
   useEffect(() => {
-    const s = loadSession();
-    if (s.age === null || s.sex === null) {
-      router.replace("/onboarding");
-      return;
-    }
-    setSession(s);
-  }, [router]);
+    if (needsOnboarding) router.replace("/onboarding");
+  }, [needsOnboarding, router]);
 
   const visible = useMemo(
     () => (session ? visibleQuestions(session.answers) : []),
     [session]
   );
 
-  if (!session || visible.length === 0) return null;
+  if (!session || needsOnboarding || visible.length === 0) return null;
 
   const q = visible[Math.min(index, visible.length - 1)];
   const locale = session.locale;
@@ -36,12 +33,10 @@ export default function Screening() {
   const isLast = index >= visible.length - 1;
 
   function setAnswer(id: string, v: AnswerValue) {
-    const next = {
+    saveSession({
       ...session!,
       answers: { ...session!.answers, [id]: v },
-    };
-    setSession(next);
-    saveSession(next);
+    });
   }
 
   function advance() {
