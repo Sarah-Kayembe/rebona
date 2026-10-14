@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { users, screenings, responses, achievements } from "@/lib/db/schema";
 import { scoreScreening, type Answers } from "@/lib/screening/scoring";
 import { POINTS_PER_SCREENING, QUESTIONS } from "@/lib/screening/questions";
+import { FINDRISC_MAX, scoreFindrisc } from "@/lib/screening/findrisc";
+import { findriscInputFromAnswers } from "@/lib/screening/findriscAnswers";
 
 /**
  * Scoring happens here, not on the client. The client sends raw answers and
@@ -38,6 +40,7 @@ export async function POST(req: Request) {
     }
 
     const result = scoreScreening(answers, { age, sex });
+    const findrisc = scoreFindrisc(findriscInputFromAnswers(answers, { age, sex }));
 
     const [user] = await db
       .insert(users)
@@ -110,6 +113,12 @@ export async function POST(req: Request) {
       bmi: result.bmi,
       urgent: result.urgent,
       urgentReasonKeys: result.urgentReasonKeys,
+      findrisc: findrisc && {
+        score: findrisc.score,
+        max: FINDRISC_MAX,
+        band: findrisc.band,
+        oneIn: findrisc.oneIn,
+      },
       points: POINTS_PER_SCREENING,
       totalPoints,
       streak,

@@ -24,7 +24,7 @@ Chronic diseases like hypertension and diabetes often build up quietly for years
 ## What it does
 
 - **Short, guided questionnaire.** Up to 15 lifestyle questions adapted from the WHO STEPwise approach to chronic disease risk factor surveillance (STEPS). Follow-up questions only appear when they are relevant, and height, weight and blood pressure are optional.
-- **Diabetes risk check.** Six more questions from FINDRISC, the validated Finnish Diabetes Risk Score (Lindström and Tuomilehto, *Diabetes Care*, 2003). The points follow the published form exactly. Waist size is optional, and the score is only given when every answer is in.
+- **Diabetes risk check.** Six more questions from FINDRISC, the validated Finnish Diabetes Risk Score (Lindström and Tuomilehto, *Diabetes Care*, 2003). The points follow the published form exactly. Waist size is optional, and the score is only given when every answer is in. The results page shows the score out of 26, its risk band, the published 10-year risk and a link to the paper.
 - **Scoring you can explain.** Risk is calculated with transparent rules rather than a black-box model. Every point traces back to a specific answer, and the results screen shows each contribution so a person (or a clinician) can see why the score is what it is.
 - **Urgent flags.** Some answers, like a very high blood pressure reading or a cluster of warning symptoms, flag the result as urgent no matter the overall score.
 - **Private by design.** No name, phone number or email. A random ID stored on the device is the only link between a person and their past screenings.
