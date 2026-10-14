@@ -19,6 +19,8 @@ interface Result {
   bmi: number | null;
   urgent: boolean;
   urgentReasonKeys: string[];
+  /** Validated diabetes risk score, or null when its questions were skipped. */
+  findrisc: { score: number; max: number; band: string; oneIn: number } | null;
   points: number;
   totalPoints: number;
   streak: number;
@@ -132,6 +134,39 @@ export default function Results() {
             </div>
           )}
         </div>
+
+        <section className="mt-8 rounded-xl bg-white border border-brand/10 p-5">
+          <h2 className="text-lg font-medium text-ink">{t(locale, "findrisc.title")}</h2>
+          {result.findrisc ? (
+            <>
+              <div className="mt-3 flex items-baseline justify-between">
+                <p className="text-3xl font-semibold text-brand">
+                  {t(locale, "findrisc.score", {
+                    score: result.findrisc.score,
+                    max: result.findrisc.max,
+                  })}
+                </p>
+                <p className="text-lg font-medium text-ink">
+                  {t(locale, `findrisc.band.${result.findrisc.band}`)}
+                </p>
+              </div>
+              <p className="mt-3 text-ink leading-relaxed">
+                {t(locale, "findrisc.odds", { oneIn: result.findrisc.oneIn })}
+              </p>
+            </>
+          ) : (
+            <p className="mt-2 text-ink leading-relaxed">{t(locale, "findrisc.missing")}</p>
+          )}
+          <p className="mt-3 text-sm text-muted leading-relaxed">{t(locale, "findrisc.about")}</p>
+          <a
+            href="https://doi.org/10.2337/diacare.26.3.725"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 inline-block text-sm text-brand underline"
+          >
+            {t(locale, "findrisc.source")}
+          </a>
+        </section>
 
         {result.contributions.length > 0 && (
           <section className="mt-8">
