@@ -113,7 +113,7 @@
   "q.findrisc_waist_cm.label": "What is your waist measurement?",
   "q.findrisc_waist_cm.help": "Measure around your middle, just below your ribs, usually at your belly button. Skip this if you do not have a tape measure.",
   "q.findrisc_waist_ranges.label": "Which waist ranges should we use for you?",
-  "q.findrisc_waist_ranges.help": "The diabetes risk score uses different healthy waist sizes for women and men. Pick the one that fits your body best.",
+  "q.findrisc_waist_ranges.help": "Women and men tend to store fat around the organs differently, so the same waist size means a different diabetes risk. Pick whichever fits your body best.",
   "q.findrisc_waist_ranges.opt.female": "Women's ranges",
   "q.findrisc_waist_ranges.opt.male": "Men's ranges",
   "q.findrisc_active_daily.label": "Are you physically active for at least 30 minutes every day?",
