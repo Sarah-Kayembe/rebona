@@ -280,11 +280,24 @@ export const RISK_TIERS = [
 
 export const POINTS_PER_SCREENING = 50;
 
+/**
+ * Whether a question applies given the answers so far. The screening flow and
+ * the scoring engine both use this, so a question is shown exactly when its
+ * answer can count.
+ */
+export function isQuestionVisible(
+  q: Question,
+  answers: Record<string, unknown>
+): boolean {
+  if (!q.dependsOn) return true;
+  const { questionId, equals, notEquals } = q.dependsOn;
+  const actual = answers[questionId];
+  if (notEquals !== undefined) return actual !== notEquals;
+  return actual === equals;
+}
+
 export function visibleQuestions(
   answers: Record<string, unknown>
 ): Question[] {
-  return QUESTIONS.filter((q) => {
-    if (!q.dependsOn) return true;
-    return answers[q.dependsOn.questionId] === q.dependsOn.equals;
-  });
+  return QUESTIONS.filter((q) => isQuestionVisible(q, answers));
 }
