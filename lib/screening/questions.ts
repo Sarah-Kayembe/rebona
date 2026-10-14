@@ -25,7 +25,8 @@ export type Section =
   | "activity"
   | "history"
   | "measurements"
-  | "symptoms";
+  | "symptoms"
+  | "diabetes";
 
 export type QuestionType = "single" | "multi" | "numeric";
 
@@ -55,6 +56,13 @@ export interface Question {
   dependsOn?: { questionId: string; equals?: string; notEquals?: string };
   /** Allow the person to move on without answering. */
   optional?: boolean;
+  /** Only ask people whose onboarding sex is one of these. */
+  onlyForSex?: string[];
+}
+
+/** Facts from onboarding that can decide whether a question is asked. */
+export interface QuestionContext {
+  sex?: string | null;
 }
 
 export const QUESTIONS: Question[] = [
@@ -258,6 +266,86 @@ export const QUESTIONS: Question[] = [
       { key: "none", points: 0 },
     ],
   },
+
+  // Diabetes risk check. These follow the FINDRISC form word for word in
+  // meaning (see findrisc.ts) and add nothing to the lifestyle score above,
+  // which is why every option is worth 0 points here.
+  {
+    id: "findrisc_waist_cm",
+    section: "diabetes",
+    type: "numeric",
+    labelKey: "q.findrisc_waist_cm.label",
+    helpKey: "q.findrisc_waist_cm.help",
+    unitKey: "unit.cm",
+    min: 40,
+    max: 200,
+    optional: true,
+  },
+  {
+    id: "findrisc_waist_ranges",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_waist_ranges.label",
+    helpKey: "q.findrisc_waist_ranges.help",
+    onlyForSex: ["prefer_not_to_say"],
+    options: [
+      { key: "female", points: 0 },
+      { key: "male", points: 0 },
+    ],
+  },
+  {
+    id: "findrisc_active_daily",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_active_daily.label",
+    helpKey: "q.findrisc_active_daily.help",
+    options: [
+      { key: "yes", points: 0 },
+      { key: "no", points: 0 },
+    ],
+  },
+  {
+    id: "findrisc_fruit_daily",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_fruit_daily.label",
+    options: [
+      { key: "yes", points: 0 },
+      { key: "no", points: 0 },
+    ],
+  },
+  {
+    id: "findrisc_bp_meds",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_bp_meds.label",
+    options: [
+      { key: "no", points: 0 },
+      { key: "yes", points: 0 },
+    ],
+  },
+  {
+    id: "findrisc_high_glucose",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_high_glucose.label",
+    helpKey: "q.findrisc_high_glucose.help",
+    options: [
+      { key: "no", points: 0 },
+      { key: "yes", points: 0 },
+    ],
+  },
+  {
+    id: "findrisc_family_diabetes",
+    section: "diabetes",
+    type: "single",
+    labelKey: "q.findrisc_family_diabetes.label",
+    options: [
+      { key: "none", points: 0 },
+      { key: "extended", points: 0 },
+      { key: "immediate", points: 0 },
+    ],
+  },
 ];
 
 /**
@@ -287,8 +375,10 @@ export const POINTS_PER_SCREENING = 50;
  */
 export function isQuestionVisible(
   q: Question,
-  answers: Record<string, unknown>
+  answers: Record<string, unknown>,
+  context: QuestionContext = {}
 ): boolean {
+  if (q.onlyForSex && !q.onlyForSex.includes(context.sex ?? "")) return false;
   if (!q.dependsOn) return true;
   const { questionId, equals, notEquals } = q.dependsOn;
   const actual = answers[questionId];
@@ -297,7 +387,8 @@ export function isQuestionVisible(
 }
 
 export function visibleQuestions(
-  answers: Record<string, unknown>
+  answers: Record<string, unknown>,
+  context: QuestionContext = {}
 ): Question[] {
-  return QUESTIONS.filter((q) => isQuestionVisible(q, answers));
+  return QUESTIONS.filter((q) => isQuestionVisible(q, answers, context));
 }

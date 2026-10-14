@@ -2,6 +2,7 @@ import {
   QUESTIONS,
   RISK_TIERS,
   isQuestionVisible,
+  type QuestionContext,
   URGENT_REFERRAL_RULES,
   type Question,
 } from "./questions";
@@ -137,7 +138,7 @@ export function scoreScreening(
   const contributions: Contribution[] = [];
 
   for (const q of QUESTIONS) {
-    if (!isQuestionVisible(q, answers)) continue;
+    if (!isQuestionVisible(q, answers, demographics)) continue;
     const value = answers[q.id];
     if (value === undefined || value === null || value === "") continue;
 
@@ -181,13 +182,16 @@ export function scoreScreening(
  * is worth displaying at all. Optional questions are excluded from the
  * denominator so skipping measurements does not read as an unfinished form.
  */
-export function completeness(answers: Answers): {
+export function completeness(
+  answers: Answers,
+  context: QuestionContext = {}
+): {
   answered: number;
   total: number;
   ratio: number;
 } {
   const required = QUESTIONS.filter(
-    (q) => !q.optional && isQuestionVisible(q, answers)
+    (q) => !q.optional && isQuestionVisible(q, answers, context)
   );
   const answered = required.filter((q) => {
     const v = answers[q.id];
