@@ -21,6 +21,11 @@ const healthy: Answers = {
   history_family: ["none"],
   history_diagnosed: ["none"],
   symptoms_recent: ["none"],
+  findrisc_active_daily: "yes",
+  findrisc_fruit_daily: "yes",
+  findrisc_bp_meds: "no",
+  findrisc_high_glucose: "no",
+  findrisc_family_diabetes: "none",
 };
 
 describe("question bank", () => {

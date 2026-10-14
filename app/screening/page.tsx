@@ -21,7 +21,7 @@ export default function Screening() {
   }, [needsOnboarding, router]);
 
   const visible = useMemo(
-    () => (session ? visibleQuestions(session.answers) : []),
+    () => (session ? visibleQuestions(session.answers, { sex: session.sex }) : []),
     [session]
   );
 
